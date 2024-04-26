@@ -61,6 +61,8 @@ class MyHomePage extends ConsumerWidget {
                       child: TextFormField(
                         controller: queryWordController,
                         decoration: const InputDecoration(
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
                           labelText: 'Search',
                           hintText: 'Search GitHub Repository',
                         ),
