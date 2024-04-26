@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:search_github_repository/provider/query_word_provider.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -21,22 +22,19 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends ConsumerWidget {
   const MyHomePage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextEditingController queryWordController = TextEditingController();
 
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: Center(
         child: Column(
@@ -60,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.64,
                       child: TextFormField(
-                        controller: TextEditingController(),
+                        controller: queryWordController,
                         decoration: const InputDecoration(
                           labelText: 'Search',
                           hintText: 'Search GitHub Repository',
@@ -70,7 +68,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     const SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: () {
-                        setState(() {});
+                        // ボタンが押されたら、StateProviderを更新
+                        ref.read(queryWordProvider.notifier).state =
+                            queryWordController.text;
+                        // ここでAPIを叩くための関数を呼び出す
+                        searchApi(queryWordController.text);
                       },
                       child: const Text('Search'),
                     ),
@@ -78,12 +80,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
           ],
         ),
       ),
     );
+  }
+
+  void searchApi(String query) {
+    // ここでAPIを叩く実装を行う
+    print("API called with query: $query");
   }
 }
