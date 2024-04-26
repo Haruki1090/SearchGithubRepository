@@ -1,6 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:search_github_repository/provider/query_word_provider.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -67,12 +68,9 @@ class MyHomePage extends ConsumerWidget {
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton(
-                      onPressed: () {
-                        // ボタンが押されたら、StateProviderを更新
-                        ref.read(queryWordProvider.notifier).state =
-                            queryWordController.text;
-                        // ここでAPIを叩くための関数を呼び出す
-                        searchApi(queryWordController.text);
+                      onPressed: () async {
+                        final String query = queryWordController.text;
+                        final List result = await searchApi(query, context);
                       },
                       child: const Text('Search'),
                     ),
@@ -87,8 +85,35 @@ class MyHomePage extends ConsumerWidget {
     );
   }
 
-  void searchApi(String query) {
-    // ここでAPIを叩く実装を行う
-    print("API called with query: $query");
+  Future<List> searchApi(String query, BuildContext context) async {
+    try {
+      final response = await http.get(
+          Uri.parse('https://api.github.com/search/repositories?q=$query'));
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body)['items'] as List;
+      } else {
+        // ポップアップでアラートダイアログで状況をユーザーに通知する
+        throw showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('エラーが発生しました。再度やり直してください。'),
+                content: Text('エラーコード: ${response.statusCode}'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            });
+      }
+    } catch (e) {
+      print('エラー: $e');
+      throw e;
+    }
   }
 }
