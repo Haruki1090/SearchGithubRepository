@@ -30,8 +30,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String searchQuery = '';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,19 +42,43 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Welcome to GitHub Repository Search!',
+              'Welcome!!',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            Text(
+              'Search GitHub Repository',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                controller: TextEditingController(text: searchQuery),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Search',
-                  hintText: 'Search GitHub Repository',
+              child: Card(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.64,
+                      child: TextFormField(
+                        controller: TextEditingController(),
+                        decoration: const InputDecoration(
+                          labelText: 'Search',
+                          hintText: 'Search GitHub Repository',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {});
+                      },
+                      child: const Text('Search'),
+                    ),
+                  ],
                 ),
               ),
+            ),
+            const SizedBox(
+              height: 10,
             ),
           ],
         ),
