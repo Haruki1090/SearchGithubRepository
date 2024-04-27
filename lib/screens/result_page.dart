@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ResultPage extends StatelessWidget {
-  const ResultPage({super.key, required this.result});
+  const ResultPage({super.key, required this.result, required this.query});
 
   final List result;
 
@@ -9,7 +9,7 @@ class ResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search Result'),
+        title: const Text(query),
       ),
       body: ListView.builder(
         itemCount: result.length,
