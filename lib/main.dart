@@ -1,7 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
+import 'package:search_github_repository/screens/result_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -20,22 +24,19 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends ConsumerWidget {
   const MyHomePage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextEditingController queryWordController = TextEditingController();
 
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: Center(
         child: Column(
@@ -59,8 +60,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.64,
                       child: TextFormField(
-                        controller: TextEditingController(),
+                        controller: queryWordController,
                         decoration: const InputDecoration(
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
                           labelText: 'Search',
                           hintText: 'Search GitHub Repository',
                         ),
@@ -68,8 +71,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton(
-                      onPressed: () {
-                        setState(() {});
+                      onPressed: () async {
+                        final String query = queryWordController.text;
+                        final List result = await searchApi(query, context);
+                        if (result.isNotEmpty) {
+                          // 結果が空でない場合のみ遷移
+                          Navigator.push(
+                            // ここでNavigator.pushを呼び出して遷移
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ResultPage(result: result, query: query),
+                            ),
+                          );
+                        }
                       },
                       child: const Text('Search'),
                     ),
@@ -77,12 +92,41 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
           ],
         ),
       ),
     );
+  }
+
+  Future<List> searchApi(String query, BuildContext context) async {
+    try {
+      final response = await http.get(
+          Uri.parse('https://api.github.com/search/repositories?q=$query'));
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body)['items'] as List;
+      } else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('エラーが発生しました。再度やり直してください。'),
+                content: Text('エラーコード: ${response.statusCode}'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // ここでダイアログを閉じる
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            });
+        return []; // 空のリストを返して、遷移を防ぐ
+      }
+    } catch (e) {
+      print('エラー: $e');
+      return []; // エラー時にも空のリストを返す
+    }
   }
 }
