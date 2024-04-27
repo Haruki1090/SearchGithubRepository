@@ -74,9 +74,17 @@ class MyHomePage extends ConsumerWidget {
                       onPressed: () async {
                         final String query = queryWordController.text;
                         final List result = await searchApi(query, context);
-                        MaterialPageRoute(
-                          builder: (context) => ResultPage(result: result, query: query),
-                        );
+                        if (result.isNotEmpty) {
+                          // 結果が空でない場合のみ遷移
+                          Navigator.push(
+                            // ここでNavigator.pushを呼び出して遷移
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ResultPage(result: result, query: query),
+                            ),
+                          );
+                        }
                       },
                       child: const Text('Search'),
                     ),
@@ -98,9 +106,7 @@ class MyHomePage extends ConsumerWidget {
       if (response.statusCode == 200) {
         return jsonDecode(response.body)['items'] as List;
       } else {
-        // ポップアップでアラートダイアログで状況をユーザーに通知する
-        throw showDialog(
-            // ignore: use_build_context_synchronously
+        showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
@@ -109,17 +115,18 @@ class MyHomePage extends ConsumerWidget {
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pop(); // ここでダイアログを閉じる
                     },
                     child: const Text('OK'),
                   ),
                 ],
               );
             });
+        return []; // 空のリストを返して、遷移を防ぐ
       }
     } catch (e) {
       print('エラー: $e');
-      throw e;
+      return []; // エラー時にも空のリストを返す
     }
   }
 }
