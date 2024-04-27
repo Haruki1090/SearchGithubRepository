@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -77,7 +79,6 @@ class MyHomePage extends ConsumerWidget {
                         if (result.isNotEmpty) {
                           // 結果が空でない場合のみ遷移
                           Navigator.push(
-                            // ここでNavigator.pushを呼び出して遷移
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
@@ -112,10 +113,10 @@ class MyHomePage extends ConsumerWidget {
               return AlertDialog(
                 title: const Text('エラーが発生しました。再度やり直してください。'),
                 content: Text('エラーコード: ${response.statusCode}'),
-                actions: <Widget>[
+                actions: [
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop(); // ここでダイアログを閉じる
+                      Navigator.of(context).pop();
                     },
                     child: const Text('OK'),
                   ),
@@ -125,7 +126,6 @@ class MyHomePage extends ConsumerWidget {
         return []; // 空のリストを返して、遷移を防ぐ
       }
     } catch (e) {
-      print('エラー: $e');
       return []; // エラー時にも空のリストを返す
     }
   }
