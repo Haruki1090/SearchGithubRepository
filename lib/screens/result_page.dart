@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 class ResultPage extends StatelessWidget {
   const ResultPage({super.key, required this.result, required this.query});
 
+  final String query;
   final List result;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(query),
+        title: Text(query),
       ),
       body: ListView.builder(
         itemCount: result.length,
