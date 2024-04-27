@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:search_github_repository/screens/detail_page.dart';
 
 class ResultPage extends StatelessWidget {
   const ResultPage({super.key, required this.result, required this.query});
