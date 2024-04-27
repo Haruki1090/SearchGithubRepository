@@ -73,6 +73,9 @@ class MyHomePage extends ConsumerWidget {
                       onPressed: () async {
                         final String query = queryWordController.text;
                         final List result = await searchApi(query, context);
+                        MaterialPageRoute(
+                          builder: (context) => ResultPage(result: result),
+                        );
                       },
                       child: const Text('Search'),
                     ),
