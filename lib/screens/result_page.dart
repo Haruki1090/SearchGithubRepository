@@ -14,7 +14,8 @@ class ResultPage extends StatelessWidget {
         title: Text(query),
       ),
       body: ListView.builder(
-        itemCount: result.length,
+        //上位20件のみ表示
+        itemCount: result.length > 20 ? 20 : result.length,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
             title: Text(result[index]['full_name']),
