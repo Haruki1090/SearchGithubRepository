@@ -16,6 +16,13 @@ class DetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Center(
+              child: Image.network(
+                repository['owner']['avatar_url'],
+                width: 100,
+                height: 100,
+              ),
+            ),
             Text(
               repository['description'],
               style: Theme.of(context).textTheme.titleLarge,
