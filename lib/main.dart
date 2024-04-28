@@ -100,10 +100,23 @@ class MyHomePage extends ConsumerWidget {
     );
   }
 
+  showProgressIndicator(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+  }
+
   Future<List> searchApi(String query, BuildContext context) async {
     try {
+      showProgressIndicator(context);
       final response = await http.get(
           Uri.parse('https://api.github.com/search/repositories?q=$query'));
+      Navigator.of(context).pop();
       if (response.statusCode == 200) {
         return jsonDecode(response.body)['items'] as List;
       } else {
