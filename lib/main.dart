@@ -1,12 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:search_github_repository/screens/result_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -37,7 +41,10 @@ class MyHomePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme
+            .of(context)
+            .colorScheme
+            .inversePrimary,
         title: Text(title),
       ),
       body: Center(
@@ -46,11 +53,17 @@ class MyHomePage extends ConsumerWidget {
           children: <Widget>[
             Text(
               'Welcome!!',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headlineMedium,
             ),
             Text(
               'Search GitHub Repository',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headlineMedium,
             ),
             const SizedBox(height: 20),
             Padding(
@@ -60,7 +73,10 @@ class MyHomePage extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.64,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.64,
                       child: TextFormField(
                         controller: queryWordController,
                         decoration: const InputDecoration(
