@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:search_github_repository/screens/create_account_screen.dart';
 import 'package:search_github_repository/screens/result_page.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -74,7 +75,11 @@ class HomeScreen extends ConsumerWidget {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const CreateAccountScreen(),
+                                ),
+                              );
                             },
                             child: const Text('アカウント新規作成'),
                           ),
