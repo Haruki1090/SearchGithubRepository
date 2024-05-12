@@ -16,11 +16,91 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme
-            .of(context)
-            .colorScheme
-            .inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.account_circle),
+            onPressed: () {
+              showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                builder: (BuildContext context) {
+                  return SizedBox(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 10),
+                          const Text('Welcome to',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                          const Text('Search GitHub Repository',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                          const SizedBox(height: 10),
+                          const Divider(),
+                          RichText(
+                            text: const TextSpan(
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.black),
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text:
+                                        'アカウントを作成いただくと、以下の便利な機能をご利用いただけます。\n\n'),
+                                TextSpan(
+                                    text: '・ご自身の検索履歴の保持\n',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                TextSpan(
+                                    text: '・お気に入りのGitHubリポジトリの登録\n\n',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                TextSpan(
+                                    text:
+                                        'これにより、情報を手軽に管理し、いつでも素早くアクセスできます。\n\n'),
+                                TextSpan(
+                                    text: 'ぜひアカウントを作成して、これらの便利な機能をお楽しみください。',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          ),
+                          const Divider(),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('アカウント新規作成'),
+                          ),
+                          const SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('ログイン'),
+                          ),
+                          const SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Close'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -28,17 +108,11 @@ class HomeScreen extends ConsumerWidget {
           children: <Widget>[
             Text(
               'Welcome!!',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headlineMedium,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
             Text(
               'Search GitHub Repository',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headlineMedium,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
             const SizedBox(height: 20),
             Padding(
@@ -48,10 +122,7 @@ class HomeScreen extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * 0.64,
+                      width: MediaQuery.of(context).size.width * 0.64,
                       child: TextFormField(
                         controller: queryWordController,
                         decoration: const InputDecoration(
