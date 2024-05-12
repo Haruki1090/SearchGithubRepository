@@ -75,6 +75,7 @@ class HomeScreen extends ConsumerWidget {
                           ),
                           ElevatedButton(
                             onPressed: () {
+                              Navigator.of(context).pop();
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => const CreateAccountScreen(),
