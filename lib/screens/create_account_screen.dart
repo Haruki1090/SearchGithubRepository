@@ -15,6 +15,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +55,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 ),
               ),
               const SizedBox(height: 40),
+              TextField(
+                controller: usernameController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'ユーザー名',
+                ),
+              ),
+              const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () {
                   if (passwordController.text !=
@@ -77,7 +86,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     );
                   } else if (emailController.text.isEmpty ||
                       passwordController.text.isEmpty ||
-                      confirmPasswordController.text.isEmpty) {
+                      confirmPasswordController.text.isEmpty ||
+                      usernameController.text.isEmpty) {
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -104,29 +114,50 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                 style: TextStyle(fontSize: 20)),
                             content: SizedBox(
                               width: double.infinity,
-                              height: 100,
+                              height: 200,
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('メールアドレス',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold)),
-                                  Text(emailController.text,
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                      overflow: TextOverflow.ellipsis),
-                                  const Text('パスワード',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold)),
-                                  Text(passwordController.text,
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                      overflow: TextOverflow.ellipsis),
+                                  Column(
+                                    children: [
+                                      const Text('メールアドレス',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold)),
+                                      Text(emailController.text,
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                          overflow: TextOverflow.ellipsis),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      const Text('パスワード',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold)),
+                                      Text(passwordController.text,
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                          overflow: TextOverflow.ellipsis),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      const Text('ユーザー名',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold)),
+                                      Text(usernameController.text,
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                          overflow: TextOverflow.ellipsis),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
@@ -139,11 +170,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                               ),
                               ElevatedButton(
                                 onPressed: () async {
-                                    await createUserWithEmailAndPassword(
-                                      email: emailController.text,
-                                      password: passwordController.text,
-                                      context: context,
-                                    );
+                                  await createUserWithEmailAndPassword(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                    username: usernameController.text,
+                                    context: context,
+                                  );
                                 },
                                 child: const Text('アカウントを作成'),
                               ),
