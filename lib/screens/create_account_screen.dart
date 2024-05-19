@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:search_github_repository/service/auth.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -97,7 +100,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: const Text('入力内容を確認', style: TextStyle(fontSize: 20)),
+                            title: const Text('入力内容を確認',
+                                style: TextStyle(fontSize: 20)),
                             content: SizedBox(
                               width: double.infinity,
                               height: 100,
@@ -105,11 +109,25 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('メールアドレス', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                  Text(emailController.text, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
-                                  const Text('パスワード', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                  Text(passwordController.text, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
-                                  ],
+                                  const Text('メールアドレス',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold)),
+                                  Text(emailController.text,
+                                      style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                      overflow: TextOverflow.ellipsis),
+                                  const Text('パスワード',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold)),
+                                  Text(passwordController.text,
+                                      style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                      overflow: TextOverflow.ellipsis),
+                                ],
                               ),
                             ),
                             actions: [
@@ -117,7 +135,17 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: const Text('閉じる'),
+                                child: const Text('編集する'),
+                              ),
+                              ElevatedButton(
+                                onPressed: () async {
+                                    await createUserWithEmailAndPassword(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                      context: context,
+                                    );
+                                },
+                                child: const Text('アカウントを作成'),
                               ),
                             ],
                           );
