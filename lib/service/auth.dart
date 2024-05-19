@@ -50,3 +50,10 @@ Future<void> createUserWithEmailAndPassword({
     );
   }
 }
+
+
+// ログインしているかどうかを確認する関数
+bool isUserLoggedIn() {
+  User? user = FirebaseAuth.instance.currentUser;
+  return user != null;
+}
