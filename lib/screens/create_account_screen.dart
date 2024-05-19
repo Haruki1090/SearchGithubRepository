@@ -97,12 +97,20 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: const Text('入力内容を確認'),
-                            content: Column(
-                              children: [
-                                Text('メールアドレス: ${emailController.text}'),
-                                Text('パスワード: ${passwordController.text}'),
-                                ],
+                            title: const Text('入力内容を確認', style: TextStyle(fontSize: 20)),
+                            content: SizedBox(
+                              width: double.infinity,
+                              height: 100,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text('メールアドレス', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                  Text(emailController.text, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
+                                  const Text('パスワード', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                  Text(passwordController.text, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
+                                  ],
+                              ),
                             ),
                             actions: [
                               TextButton(
