@@ -26,7 +26,7 @@ Future<void> createUserWithEmailAndPassword({
         'email': email,
         'username': username,
         'createdAt': Timestamp.now(),
-        // 必要に応じて他の情報も追加
+        // TODO 必要に応じて他の情報も追加
       });
 
       hideLoadingIndicator(context); // ローディングインジケーターを非表示
