@@ -1,12 +1,11 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:search_github_repository/components/welcome_dialog.dart';
-import 'package:search_github_repository/screens/create_account_screen.dart';
-import 'package:search_github_repository/screens/login_screen.dart';
 import 'package:search_github_repository/screens/result_page.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:search_github_repository/service/auth.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key, required this.title});
@@ -16,6 +15,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextEditingController queryWordController = TextEditingController();
+    final authState = ref.watch(authStateProvider);
 
     return Scaffold(
       appBar: AppBar(

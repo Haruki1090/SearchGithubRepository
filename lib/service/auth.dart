@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:search_github_repository/screens/home_screen.dart';
 import 'package:search_github_repository/utils/loading_indicator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -68,8 +69,12 @@ Future<void> createUserWithEmailAndPassword({
 }
 
 
-// ログインしているかどうかを確認する関数
-bool isUserLoggedIn() {
-  User? user = FirebaseAuth.instance.currentUser;
-  return user != null;
-}
+// FirebaseAuthインスタンスを提供するプロバイダー
+final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
+  return FirebaseAuth.instance;
+});
+
+// ユーザーのログイン状態を監視するStreamProvider
+final authStateProvider = StreamProvider<User?>((ref) {
+  return ref.watch(firebaseAuthProvider).authStateChanges();
+});
