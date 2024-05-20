@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:search_github_repository/service/auth.dart';
 
 class LogInScreen extends StatelessWidget {
   const LogInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('おかえりなさい'),
@@ -17,23 +21,29 @@ class LogInScreen extends StatelessWidget {
             children: <Widget>[
               const Text('アカウント情報を入力', style: TextStyle(fontSize: 20)),
               const SizedBox(height: 30),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: emailController,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'メールアドレス',
                 ),
               ),
               const SizedBox(height: 40),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: passwordController,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'パスワード',
                 ),
               ),
               const SizedBox(height: 40),
               ElevatedButton(
-                onPressed: () {
-                  // ユーザー登録処理
+                onPressed: () async{
+                  await signInWithEmailAndPassword(
+                      context: context,
+                      email: emailController.text,
+                      password: passwordController.text,
+                  );
                 },
                 child: const Text('ログイン'),
               ),
