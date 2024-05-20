@@ -68,6 +68,86 @@ Future<void> createUserWithEmailAndPassword({
   }
 }
 
+// ログイン処理を行う関数
+Future<void> signInWithEmailAndPassword({
+  required BuildContext context,
+  required String email,
+  required String password,
+}) async {
+  showLoadingIndicator(context); // ローディングインジケーターを表示
+  try {
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    User? user = userCredential.user;
+    if (user != null) {
+      hideLoadingIndicator(context); // ローディングインジケーターを非表示
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('ログインに成功しました。'), backgroundColor: Colors.green),
+      );
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(title: 'Search GitHub Repository'),
+        ),
+            (route) => false,
+      );
+    }
+  } on FirebaseAuthException catch (e) {
+    hideLoadingIndicator(context); // ローディングインジケーターを非表示
+    String errorMessage;
+    if (e.code == 'user-not-found') {
+      errorMessage = 'そのメールアドレスのユーザーは存在しません。';
+    } else if (e.code == 'wrong-password') {
+      errorMessage = 'パスワードが間違っています。';
+    } else {
+      errorMessage = '認証中にエラーが発生しました: ${e.message}';
+      print('FirebaseAuthException: $e');
+    }
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
+    );
+  } catch (e) {
+    hideLoadingIndicator(context); // ローディングインジケーターを非表示
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('エラーが発生しました: $e'), backgroundColor: Colors.red),
+    );
+    print('Error: $e');
+  }
+}
+
+// ログアウト処理を行う関数
+Future<void> signOut({
+  required BuildContext context,
+}) async {
+  showLoadingIndicator(context); // ローディングインジケーターを表示
+  try {
+    await FirebaseAuth.instance.signOut();
+    hideLoadingIndicator(context); // ローディングインジケーターを非表示
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('ログアウトしました。'), backgroundColor: Colors.green),
+    );
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const HomeScreen(title: 'Search GitHub Repository'),
+      ),
+          (route) => false,
+    );
+  } catch (e) {
+    hideLoadingIndicator(context); // ローディングインジケーターを非表示
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('エラーが発生しました: $e'), backgroundColor: Colors.red),
+    );
+    print('Error: $e');
+  }
+}
+
 
 // FirebaseAuthインスタンスを提供するプロバイダー
 final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
