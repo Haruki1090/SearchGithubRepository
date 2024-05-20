@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:search_github_repository/components/my_page.dart';
 import 'package:search_github_repository/components/search_history_list.dart';
 import 'package:search_github_repository/components/welcome_dialog.dart';
-import 'package:search_github_repository/provider/search_history_provider.dart';
 import 'package:search_github_repository/screens/result_page.dart';
 import 'package:search_github_repository/service/auth.dart';
 import 'package:search_github_repository/service/firestore_service.dart';
@@ -19,7 +18,6 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final TextEditingController queryWordController = TextEditingController();
     final authState = ref.watch(authStateProvider);
-    final searchHistoryAsyncValue = ref.watch(searchHistoryProvider);
 
     return Scaffold(
       appBar: AppBar(
