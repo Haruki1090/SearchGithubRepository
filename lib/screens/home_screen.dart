@@ -7,6 +7,7 @@ import 'package:search_github_repository/screens/result_page.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:search_github_repository/service/auth.dart';
+import 'package:search_github_repository/service/firestore_service.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key, required this.title});
@@ -97,6 +98,8 @@ class HomeScreen extends ConsumerWidget {
                         final String query = queryWordController.text;
                         final List result = await searchApi(query, context);
                         if (result.isNotEmpty) {
+                          // 検索履歴を保存してから
+                          createSearchHistory(query);
                           // 結果が空でない場合のみ遷移
                           Navigator.push(
                             context,
