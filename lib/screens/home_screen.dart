@@ -2,12 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:search_github_repository/components/my_page.dart';
+import 'package:search_github_repository/components/search_history_list.dart';
 import 'package:search_github_repository/components/welcome_dialog.dart';
+import 'package:search_github_repository/provider/search_history_provider.dart';
 import 'package:search_github_repository/screens/result_page.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:search_github_repository/service/auth.dart';
 import 'package:search_github_repository/service/firestore_service.dart';
+import 'package:search_github_repository/utils/search_api.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key, required this.title});
@@ -18,6 +19,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final TextEditingController queryWordController = TextEditingController();
     final authState = ref.watch(authStateProvider);
+    final searchHistoryAsyncValue = ref.watch(searchHistoryProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -57,10 +59,15 @@ class HomeScreen extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.1,
+            ),
             // ログインしていれば「ログイン中」と表示する
             Container(
               child: authState.when(
-                data: (user) => user != null ? const Text('ログイン中') : const Text('ログインしていません'),
+                data: (user) => user != null
+                    ? const Text('ログイン中')
+                    : const Text('ログインしていません'),
                 loading: () => const CircularProgressIndicator(),
                 error: (error, stack) => Text('エラー: $error'),
               ),
@@ -117,52 +124,29 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 10),
+            authState.when(
+              data: (user) {
+                if (user != null) {
+                  return Column(
+                    children: [
+                      const Text('最近の気になるトピック', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        child: SearchHistoryList(queryWordController: queryWordController),
+                      ),
+                    ],
+                  );
+                } else {
+                  return const Text('検索履歴はログインすると表示されます');
+                }
+              },
+              loading: () => const CircularProgressIndicator(),
+              error: (error, stack) => Text('エラー: $error'),
+            ),
           ],
         ),
       ),
     );
-  }
-
-  showProgressIndicator(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-  }
-
-  Future<List> searchApi(String query, BuildContext context) async {
-    try {
-      showProgressIndicator(context);
-      final response = await http.get(
-          Uri.parse('https://api.github.com/search/repositories?q=$query'));
-      Navigator.of(context).pop();
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body)['items'] as List;
-      } else {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('エラーが発生しました。再度やり直してください。'),
-                content: Text('エラーコード: ${response.statusCode}'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
-              );
-            });
-        return []; // 空のリストを返して、遷移を防ぐ
-      }
-    } catch (e) {
-      return []; // エラー時にも空のリストを返す
-    }
   }
 }
