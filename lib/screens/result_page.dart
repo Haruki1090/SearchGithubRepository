@@ -14,22 +14,28 @@ class ResultPage extends StatelessWidget {
         title: Text(query),
       ),
       body: ListView.builder(
-        //上位20件のみ表示
+        // 上位20件のみ表示
         itemCount: result.length > 20 ? 20 : result.length,
         itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            title: Text(result[index]['full_name']),
-            subtitle: Text(result[index]['description']),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailPage(
-                    repository: result[index],
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(result[index]['owner']['avatar_url']),
+              ),
+              title: Text(result[index]['full_name']),
+              subtitle: Text(result[index]['description'] ?? 'No description'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailPage(
+                      repository: result[index],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           );
         },
       ),
