@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:search_github_repository/components/my_page.dart';
 import 'package:search_github_repository/components/search_history_list.dart';
+import 'package:search_github_repository/components/userInfo_widget.dart';
 import 'package:search_github_repository/components/welcome_dialog.dart';
 import 'package:search_github_repository/screens/result_page.dart';
 import 'package:search_github_repository/service/auth.dart';
@@ -57,19 +58,7 @@ class HomeScreen extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
-            ),
-            // ログインしていれば「ログイン中」と表示する
-            Container(
-              child: authState.when(
-                data: (user) => user != null
-                    ? const Text('ログイン中')
-                    : const Text('ログインしていません'),
-                loading: () => const CircularProgressIndicator(),
-                error: (error, stack) => Text('エラー: $error'),
-              ),
-            ),
+            const UserInfoWidget(),
             Text(
               'Welcome!!',
               style: Theme.of(context).textTheme.headlineMedium,
