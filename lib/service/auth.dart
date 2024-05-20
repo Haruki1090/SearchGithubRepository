@@ -149,12 +149,10 @@ Future<void> signOut({
 }
 
 
-// FirebaseAuthインスタンスを提供するプロバイダー
 final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
   return FirebaseAuth.instance;
 });
 
-// ユーザーのログイン状態を監視するStreamProvider
 final authStateProvider = StreamProvider<User?>((ref) {
   return ref.watch(firebaseAuthProvider).authStateChanges();
 });
