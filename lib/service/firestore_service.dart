@@ -9,19 +9,30 @@ Future<void> createSearchHistory(String query) async {
     throw Exception('ユーザーがログインしていません');
   }
 
-  final searchHistory = SearchHistory(
-    query: query,
-    createdAt: Timestamp.now(),
-    updatedAt: Timestamp.now(),
-  );
+  final userRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
+  final searchHistoryRef = userRef.collection('search_history');
 
-  final document = FirebaseFirestore.instance
-      .collection('users')
-      .doc(user.uid)
-      .collection('search_history')
-      .doc();
+  // 同じクエリが存在するか確認
+  final querySnapshot = await searchHistoryRef
+      .where('query', isEqualTo: query)
+      .limit(1)
+      .get();
 
-  await document.set(searchHistory.toJson());
+  if (querySnapshot.docs.isNotEmpty) {
+    // 既存のドキュメントを更新
+    final docId = querySnapshot.docs.first.id;
+    await searchHistoryRef.doc(docId).update({
+      'updatedAt': Timestamp.now(),
+    });
+  } else {
+    // 新しいドキュメントを作成
+    final searchHistory = SearchHistory(
+      query: query,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    );
+    await searchHistoryRef.add(searchHistory.toJson());
+  }
 }
 
 // 検索履歴を取得する関数
