@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:search_github_repository/components/my_page.dart';
 import 'package:search_github_repository/components/welcome_dialog.dart';
 import 'package:search_github_repository/screens/result_page.dart';
 import 'dart:convert';
@@ -25,12 +26,27 @@ class HomeScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () {
-              showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                builder: (BuildContext context) {
-                  return const WelcomeDialog();
+              authState.when(
+                data: (user) {
+                  if (user != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MyPage(),
+                      ),
+                    );
+                  } else {
+                    showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const WelcomeDialog();
+                      },
+                    );
+                  }
                 },
+                loading: () {},
+                error: (error, stack) {},
               );
             },
           ),
@@ -40,6 +56,14 @@ class HomeScreen extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // ログインしていれば「ログイン中」と表示する
+            Container(
+              child: authState.when(
+                data: (user) => user != null ? const Text('ログイン中') : const Text('ログインしていません'),
+                loading: () => const CircularProgressIndicator(),
+                error: (error, stack) => Text('エラー: $error'),
+              ),
+            ),
             Text(
               'Welcome!!',
               style: Theme.of(context).textTheme.headlineMedium,
