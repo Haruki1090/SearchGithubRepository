@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:search_github_repository/components/my_page.dart';
 import 'package:search_github_repository/components/search_history_list.dart';
@@ -72,6 +74,11 @@ class HomeScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Card(
+                surfaceTintColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.grey[700]!, width: 3.0),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -79,16 +86,21 @@ class HomeScreen extends ConsumerWidget {
                       width: MediaQuery.of(context).size.width * 0.64,
                       child: TextFormField(
                         controller: queryWordController,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           enabledBorder: InputBorder.none,
                           focusedBorder: InputBorder.none,
                           labelText: 'Search',
+                          labelStyle: TextStyle(color: Colors.grey[700]!),
                           hintText: 'Search GitHub Repository',
+                          hintStyle: TextStyle(color: Colors.grey[700]!),
                         ),
                       ),
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.black, backgroundColor: Colors.white,
+                      ),
                       onPressed: () async {
                         final String query = queryWordController.text;
                         final List result = await searchApi(query, context);
