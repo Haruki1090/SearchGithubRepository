@@ -76,7 +76,7 @@ class HomeScreen extends ConsumerWidget {
               child: Card(
                 surfaceTintColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Colors.grey[700]!, width: 3.0),
+                  side: BorderSide(color: Colors.grey[600]!, width: 3.0),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Row(

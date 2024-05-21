@@ -11,9 +11,11 @@ class LogInScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text('おかえりなさい'),
       ),
-      body: Center(
+      body: Container(
+        color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -38,6 +40,9 @@ class LogInScreen extends StatelessWidget {
               ),
               const SizedBox(height: 40),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white, backgroundColor: Colors.black,
+                ),
                 onPressed: () async{
                   await signInWithEmailAndPassword(
                       context: context,
