@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:search_github_repository/components/my_page.dart';
+import 'package:search_github_repository/components/log_out.dart';
 import 'package:search_github_repository/components/search_history_list.dart';
 import 'package:search_github_repository/components/userInfo_widget.dart';
 import 'package:search_github_repository/components/welcome_dialog.dart';
@@ -36,7 +36,7 @@ class HomeScreen extends ConsumerWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const MyPage(),
+                        builder: (context) => const LogoutPage(),
                       ),
                     );
                   } else {
