@@ -21,9 +21,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Text('ようこそ'),
       ),
-      body: Center(
+      body: Container(
+        color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -64,6 +66,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               ),
               const SizedBox(height: 40),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white, backgroundColor: Colors.black,
+                ),
                 onPressed: () {
                   if (passwordController.text !=
                       confirmPasswordController.text) {
@@ -92,14 +97,21 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
+                          surfaceTintColor: Colors.white,
                           title: const Text('エラー'),
                           content: const Text('全ての項目を入力してください'),
                           actions: [
                             TextButton(
+                              style: TextButton.styleFrom(
+                                side: const BorderSide(color: Colors.grey, width: 1.0), // 外枠を追加
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10), // 丸枠を設定
+                                ),
+                              ),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: const Text('閉じる'),
+                              child: const Text('閉じる', style: TextStyle(color: Colors.black)),
                             ),
                           ],
                         );
