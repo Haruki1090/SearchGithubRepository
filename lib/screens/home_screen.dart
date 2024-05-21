@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:search_github_repository/components/my_page.dart';
+import 'package:search_github_repository/components/log_out.dart';
 import 'package:search_github_repository/components/search_history_list.dart';
 import 'package:search_github_repository/components/userInfo_widget.dart';
 import 'package:search_github_repository/components/welcome_dialog.dart';
@@ -22,7 +24,7 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Colors.white,
         title: Text(title),
         actions: [
           IconButton(
@@ -34,7 +36,7 @@ class HomeScreen extends ConsumerWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const MyPage(),
+                        builder: (context) => const LogoutPage(),
                       ),
                     );
                   } else {
@@ -54,7 +56,8 @@ class HomeScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: Center(
+      body: Container(
+        color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -71,6 +74,11 @@ class HomeScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Card(
+                surfaceTintColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.grey[600]!, width: 3.0),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -78,16 +86,21 @@ class HomeScreen extends ConsumerWidget {
                       width: MediaQuery.of(context).size.width * 0.64,
                       child: TextFormField(
                         controller: queryWordController,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           enabledBorder: InputBorder.none,
                           focusedBorder: InputBorder.none,
                           labelText: 'Search',
+                          labelStyle: TextStyle(color: Colors.grey[700]!),
                           hintText: 'Search GitHub Repository',
+                          hintStyle: TextStyle(color: Colors.grey[700]!),
                         ),
                       ),
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.black, backgroundColor: Colors.white,
+                      ),
                       onPressed: () async {
                         final String query = queryWordController.text;
                         final List result = await searchApi(query, context);

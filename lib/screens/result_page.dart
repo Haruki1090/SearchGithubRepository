@@ -11,33 +11,41 @@ class ResultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
         title: Text(query),
       ),
-      body: ListView.builder(
-        // 上位20件のみ表示
-        itemCount: result.length > 20 ? 20 : result.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(result[index]['owner']['avatar_url']),
-              ),
-              title: Text(result[index]['full_name']),
-              subtitle: Text(result[index]['description'] ?? 'No description'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailPage(
-                      repository: result[index],
-                    ),
+      body: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
+        child: ListView.builder(
+          // 上位20件のみ表示
+          itemCount: result.length > 20 ? 20 : result.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Card(
+              surfaceTintColor: Colors.white,
+              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(result[index]['owner']['avatar_url']),
                   ),
-                );
-              },
-            ),
-          );
-        },
+                  title: Text(result[index]['full_name']),
+                  subtitle: Text(result[index]['description'] ?? 'No description'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPage(
+                          repository: result[index],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+            );
+          },
+        ),
       ),
     );
   }
