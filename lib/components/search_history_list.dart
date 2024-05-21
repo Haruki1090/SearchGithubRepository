@@ -22,6 +22,7 @@ class SearchHistoryList extends ConsumerWidget {
           itemBuilder: (context, index) {
             final searchHistory = searchHistoryList[index];
             return Card(
+              color: Colors.white,
               child: ListTile(
                 title: Text(searchHistory.query),
                 onTap: () async{
