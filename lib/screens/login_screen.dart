@@ -18,41 +18,43 @@ class LogInScreen extends StatelessWidget {
         color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text('アカウント情報を入力', style: TextStyle(fontSize: 20)),
-              const SizedBox(height: 30),
-              TextField(
-                controller: emailController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'メールアドレス',
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text('アカウント情報を入力', style: TextStyle(fontSize: 20)),
+                const SizedBox(height: 30),
+                TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'メールアドレス',
+                  ),
                 ),
-              ),
-              const SizedBox(height: 40),
-              TextField(
-                controller: passwordController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'パスワード',
+                const SizedBox(height: 40),
+                TextField(
+                  controller: passwordController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'パスワード',
+                  ),
                 ),
-              ),
-              const SizedBox(height: 40),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, backgroundColor: Colors.black,
+                const SizedBox(height: 40),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white, backgroundColor: Colors.black,
+                  ),
+                  onPressed: () async{
+                    await signInWithEmailAndPassword(
+                        context: context,
+                        email: emailController.text,
+                        password: passwordController.text,
+                    );
+                  },
+                  child: const Text('ログイン'),
                 ),
-                onPressed: () async{
-                  await signInWithEmailAndPassword(
-                      context: context,
-                      email: emailController.text,
-                      password: passwordController.text,
-                  );
-                },
-                child: const Text('ログイン'),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
