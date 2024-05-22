@@ -124,6 +124,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
+                              surfaceTintColor: Colors.white,
                               title: const Text('入力内容を確認',
                                   style: TextStyle(fontSize: 20)),
                               content: SizedBox(
@@ -183,6 +184,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                   child: const Text('編集する'),
                                 ),
                                 ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: Colors.black,
+                                  ),
                                   onPressed: () async {
                                     await createUserWithEmailAndPassword(
                                       email: emailController.text,
